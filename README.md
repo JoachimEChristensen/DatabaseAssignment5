@@ -19,7 +19,7 @@ local-infile = 1 <br/>
 Just move the files you unzip from 7z file into ***C:/ProgramData/MySQL/MySQL Server 8.0/Uploads*** folder (**ONLY files not folder**)
 
 ### Excercise
-More details about how to call the code are described in the sql file.
+More details about how to call the code are described in 'Assignment_5_Excercises.sql' file.
 
 #### Excercise 1
 ```
