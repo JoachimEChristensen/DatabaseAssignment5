@@ -51,6 +51,45 @@ CALL `stackoverflow`.`add_NewComment`(<{IN postsID INT}>, <{postsScore INT}>, <{
 */
 
 /* Excercise 4 */
+DROP table IF EXISTS questions_answeres;
+create table questions_answeres(
+ Id INT NOT NULL PRIMARY KEY,
+ Text JSON
+);
 
+DROP procedure IF EXISTS `add_QnA_view`;
+DELIMITER $$
+CREATE PROCEDURE `add_QnA_view` ()
+BEGIN
+insert into questions_answeres (Text) values 
+((select JSON_OBJECT("Name", users.DisplayName, "Score", posts.Score, "Body",JSON_ARRAYAGG(posts.Body)) as jsonObject
+from posts, users, comments 
+where UserId = users.Id AND posts.Id = PostId 
+group by users.Id));
+END$$
+DELIMITER ;
+
+DROP view IF EXISTS `QnA_view`;
+CREATE  OR REPLACE VIEW `QnA_view` AS
+select JSON_OBJECT("Name", users.DisplayName, "Score", posts.Score, "Body",JSON_ARRAYAGG(posts.Body)) as jsonObject
+from posts, users, comments 
+where UserId = users.Id AND posts.Id = PostId 
+group by users.Id;
+
+/* trigger that updates the material view on demand */
+DROP trigger IF EXISTS add_view; 
+DELIMITER $$
+CREATE TRIGGER add_view 
+AFTER UPDATE ON posts
+FOR EACH ROW
+BEGIN 
+call add_QnA_view(); 
+END$$
+DELIMITER ;
+
+/* call below to show the materialized view and change the limit to see more rows
+SELECT * FROM stackoverflow.qna_view
+limit 5;
 
 /* Excercise 5 */
+/* TODO */
