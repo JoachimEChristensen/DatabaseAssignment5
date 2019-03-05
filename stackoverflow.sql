@@ -11,7 +11,7 @@ create table badges (
 );
 drop table if exists comments;
 CREATE TABLE comments (
-    Id INT NOT NULL PRIMARY KEY,
+    Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     PostId INT NOT NULL,
     Score INT NOT NULL DEFAULT 0,
     Text TEXT,
@@ -38,7 +38,7 @@ CREATE TABLE post_links (
 );
 drop table if exists posts;
 CREATE TABLE posts (
-    Id INT NOT NULL PRIMARY KEY,
+    Id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     PostTypeId SMALLINT,
     AcceptedAnswerId INT,
     ParentId INT,
