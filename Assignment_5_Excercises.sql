@@ -41,7 +41,7 @@ DROP procedure IF EXISTS `add_NewComment`;
 DELIMITER $$
 CREATE PROCEDURE `add_NewComment` (IN postsID INT, postsScore INT, postsText TEXT, usersID INT)
 BEGIN
-insert into comments (PostId, Score, Text, CreationDate, UserId) 
+insert into comments (Id, PostId, Score, Text, CreationDate, UserId) 
 values (postsID, postsScore, postsText, NOW(), usersID);
 END$$
 DELIMITER ;
@@ -92,4 +92,24 @@ SELECT * FROM stackoverflow.qna_view
 limit 5;
 
 /* Excercise 5 */
-/* TODO */
+DROP procedure IF EXISTS `match_posts`;
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `match_posts`(keyword Text)
+BEGIN
+select * from questions_answeres where Text in (select Text->'$.text'='%keyword%'
+AND Text->'$.text'>=1); 
+END$$
+DELIMITER ;
+
+DROP procedure IF EXISTS `match_comments`;
+DELIMITER $$
+CREATE PROCEDURE `match_comments` (keyword Text)
+BEGIN
+select * from add_view where jsonObject->'$.text'='%keyword%'>=2;
+END$$
+DELIMITER ;
+
+/* call below to show the matching posts or comments
+call parameterkeyword("keyword");
+call postskeyword("keyword")
+*/
